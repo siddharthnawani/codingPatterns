@@ -1,0 +1,1487 @@
+Given a string, s, that represents a DNA subsequence, and a number k return all the contiguous subsequences (substrings) of length 𝑘 that occur more than once in the string. The order of the returned subsequences does not matter. If no repeated substring is found, the function should return an empty set.
+
+The DNA sequence is composed of a series of nucleotides abbreviated as
+𝐴
+A
+,
+𝐶
+C
+,
+𝐺
+G
+, and
+𝑇
+T
+. For example,
+𝐴
+𝐶
+𝐺
+𝐴
+𝐴
+𝑇
+𝑇
+𝐶
+𝐶
+𝐺
+ACGAATTCCG
+ is a DNA sequence. When studying DNA, it is useful to identify repeated sequences in it.
+
+ Example 1:
+
+ Input: s = "AAAAACCCCCAAAAACCCCCCAAAAAGGGTTT"  k=10
+ Output: ["AAAAACCCCC","CCCCCAAAAA"]
+
+
+ Solution :
+
+  Solution: Repeated DNA Sequences
+  Let's solve the Repeated DNA Sequences problem using the Sliding Window pattern.
+
+  We'll cover the following
+
+  Statement
+  Solution
+  Naive approach
+  Optimized approach using sliding window
+  Hashing and comparison in linear time
+  Hashing and comparison in constant time
+  Step-by-step solution construction
+  Just the code
+  Solution summary
+  Time complexity
+  Space complexity
+  Statement
+  Given a string, s, that represents a DNA subsequence, and a number
+  𝑘
+  k
+  , return all the contiguous subsequences (substrings) of length
+  𝑘
+  k
+   that occur more than once in the string. The order of the returned subsequences does not matter. If no repeated substring is found, the function should return an empty set.
+
+  The DNA sequence is composed of a series of nucleotides abbreviated as
+  𝐴
+  A
+  ,
+  𝐶
+  C
+  ,
+  𝐺
+  G
+  , and
+  𝑇
+  T
+  . For example,
+  𝐴
+  𝐶
+  𝐺
+  𝐴
+  𝐴
+  𝑇
+  𝑇
+  𝐶
+  𝐶
+  𝐺
+  ACGAATTCCG
+   is a DNA sequence. When studying DNA, it is useful to identify repeated subsequences in it.
+
+  Constraints:
+
+  1
+  1
+
+  ≤
+  ≤
+   s.length
+  ≤
+  ≤
+
+  1
+  0
+  3
+  10
+  3
+
+  s[i] is either A, C, G, or T.
+  1
+  ≤
+  𝑘
+  ≤
+  10
+  1≤k≤10
+  Solution
+  So far, you’ve probably brainstormed some approaches on how to solve this problem. Let’s explore some of these approaches and figure out which one to follow while considering time complexity and any implementation constraints.
+
+  Naive approach
+  A naive approach would be to iterate through the input DNA sequence and add all the unique substrings of length
+  𝑘
+  k
+   to a set. If a substring is already present in a set, it is a repeated substring.
+
+  Here’s how the algorithm works:
+
+  We iterate the string using a pointer
+  𝑖
+  i
+  , ranging from
+  0
+  0
+   to
+  (
+  𝑛
+  −
+  𝑘
+  +
+  1
+  )
+  (n−k+1)
+  . This is the number of
+  𝑘
+  k
+  -length substrings present in the sequence.
+
+  At each iteration, we generate the current
+  𝑘
+  k
+  -length substring, i.e., s[i]…s[i + k - 1].
+
+  Next, we check if this substring is already present in the set.
+
+  If it is, the current substring is a repeated sequence, so we add it to our output.
+
+  Otherwise, the current substring has not yet been repeated, so we just add it to the set.
+
+  We repeat the above process for all
+  𝑘
+  k
+  -length substrings.
+
+  Once all
+  𝑘
+  k
+  -length substrings have been evaluated, we return the output.
+
+  The time complexity of this approach is
+  𝑂
+  (
+  (
+  𝑛
+  −
+  𝑘
+  )
+  ×
+  𝑘
+  )
+  O((n−k)×k)
+  , where
+  𝑛
+  n
+   is the length of the input sequence and
+  𝑘
+  k
+   is the size of each contiguous subsequence we consider. This is because we iterate over
+  (
+  𝑛
+  −
+  𝑘
+  +
+  1
+  )
+  (n−k+1)
+   substrings of length
+  𝑘
+  k
+  , and at each iteration, the time taken to generate a
+  𝑘
+  k
+  -length substring is
+  𝑂
+  (
+  𝑘
+  )
+  O(k)
+  .
+
+  The space complexity of this approach is
+  𝑂
+  (
+  (
+  𝑛
+  −
+  𝑘
+  )
+  ×
+  𝑘
+  )
+  O((n−k)×k)
+  , since in the worst case, our set can contain
+  (
+  𝑛
+  −
+  𝑘
+  +
+  1
+  )
+  (n−k+1)
+   elements, and at each iteration of the traversal, we are allocating memory to generate a new
+  𝑘
+  k
+  -length substring.
+
+  Optimized approach using sliding window
+  The problem can be optimized using a sliding window approach. We use the Rabin-Karp algorithm that utilizes a sliding window with rolling hash for pattern matching.
+
+  Here’s the basic idea of the algorithm:
+
+  We traverse the string by using a sliding window of length
+  𝑘
+  k
+  , which slides one character forward on each iteration.
+
+  On each iteration, we compute the hash of the current
+  𝑘
+  k
+  -length substring in the window.
+
+  We check if the hash is already present in the set.
+
+  If it is, the substring is repeated, so we add it to the output.
+
+  Otherwise, the substring has not yet been repeated, so we add the computed hash to the set.
+
+  We repeat the above process for all
+  𝑘
+  k
+  -length substrings by sliding the window one character forward on each iteration.
+
+  After all
+  𝑘
+  k
+  -length substrings have been evaluated, we return the output.
+
+  There are multiple approaches for computing hash values, and the choice of the hash function can impact the algorithm’s time complexity. Let’s look at some approaches below.
+
+  Hashing and comparison in linear time
+  Let’s use a simple hashing method that sums the ASCII code of characters present in a window.
+
+  Consider the sequence
+  𝐴
+  𝐶
+  𝑇
+  𝐶
+  𝑇
+  ACTCT
+   with
+  𝑘
+  =
+  2
+  k=2
+  .
+
+  Initially, the sequence in the window is
+  𝐴
+  𝐶
+  AC
+   and its hash value is:
+
+  𝐻
+  (
+  𝐴
+  𝐶
+  )
+  =
+  65
+  +
+  67
+  =
+  132
+  H(AC)=65+67=132
+
+  Since the above hash value has not been repeated yet, we add this hash value to the set and slide the window one character forward.
+
+  The sequence in the window is now
+  𝐶
+  𝑇
+  CT
+  . To compute the hash value of
+  𝐶
+  𝑇
+  CT
+  , the ASCII of
+  𝐴
+  A
+   will be removed from the previous hash value and the ASCII of
+  𝑇
+  T
+   will then be added:
+
+  𝐻
+  (
+  𝐶
+  𝑇
+  )
+  =
+  132
+  −
+  65
+  +
+  84
+  =
+  151
+  H(CT)=132−65+84=151
+
+  Since the above hash value has not been repeated yet, we add this hash value to the set and slide the window one character forward.
+
+  The sequence in the window is now
+  𝑇
+  𝐶
+  TC
+  . To compute the hash value of
+  𝑇
+  𝐶
+  TC
+  , the ASCII of
+  𝐶
+  C
+   will be removed from the previous hash value and then again added:
+
+  𝐻
+  (
+  𝑇
+  𝐶
+  )
+  =
+  151
+  −
+  67
+  +
+  67
+  =
+  151
+  H(TC)=151−67+67=151
+
+  Here, we have the same hash value but different sequences—
+  𝐶
+  𝑇
+  CT
+   and
+  𝑇
+  𝐶
+  TC
+  . This means that if a hash value is already present in the set, we need to compare the corresponding sequences as well to confirm if they are identical. In this case, they are not, so we add this hash value to the set and slide the window one character forward.
+
+  The sequence in the window is now
+  𝐶
+  𝑇
+  CT
+  . To compute the hash value of
+  𝐶
+  𝑇
+  CT
+  , the ASCII of
+  𝑇
+  T
+   will be removed from the previous hash value and then again added:
+
+  𝐻
+  (
+  𝐶
+  𝑇
+  )
+  =
+  151
+  −
+  84
+  +
+  84
+  =
+  151
+  H(CT)=151−84+84=151
+
+  Here we have the same hash value, so we compare the two sequences. Since they are identical, the sequence has been repeated and is therefore added to the output.
+
+  Computing the hash value and then comparing the strings if the hashes are equal will take linear time,
+  𝑂
+  (
+  𝑘
+  )
+  O(k)
+  . In the worst case, the comparisons will occur after each slide, which will make the running time the same as that of the naive approach, which is
+  𝑂
+  (
+  (
+  𝑛
+  −
+  𝑘
+  +
+  1
+  )
+  ×
+  𝑘
+  )
+  O((n−k+1)×k)
+  .
+
+  Hashing and comparison in constant time
+  We need a hash function that helps us achieve constant-time hashing. For this purpose, we use the polynomial rolling hash technique:
+
+  𝐻
+  =
+  𝑐
+  1
+  𝑎
+  𝑘
+  −
+  1
+  +
+  𝑐
+  2
+  𝑎
+  𝑘
+  −
+  2
+  +
+  .
+  .
+  .
+  +
+  𝑐
+  𝑖
+  𝑎
+  𝑘
+  −
+  𝑖
+  +
+  .
+  .
+  .
+  +
+  𝑐
+  𝑘
+  −
+  1
+  𝑎
+  1
+  +
+  𝑐
+  𝑘
+  𝑎
+  0
+  H=c
+  1
+  ​
+   a
+  k−1
+   +c
+  2
+  ​
+   a
+  k−2
+   +...+c
+  i
+  ​
+   a
+  k−i
+   +...+c
+  k−1
+  ​
+   a
+  1
+   +c
+  k
+  ​
+   a
+  0
+
+
+  Here,
+  𝑎
+  a
+   is a constant,
+  𝑐
+  1
+  ,
+  …
+  ,
+  𝑐
+  𝑘
+  c
+  1
+  ​
+   ,…,c
+  k
+  ​
+
+   are the characters in a sequence, and
+  𝑘
+  k
+   is the substring length. Since we only have
+  4
+  4
+   possible nucleotides, our
+  𝑎
+  a
+   would be
+  4
+  4
+  . We also assign numeric values to the nucleotides, as shown in the table below:
+
+
+
+
+  Note: We use a value of
+  4
+  4
+   for the constant
+  𝑎
+  a
+   since this ensures that each nucleotide is assigned a unique value in the polynomial hash function. This reduces the number of hash collisions and helps reduce the randomness in the behaviour of the hash function.
+
+  It is not necessary to set the constant
+  𝑎
+  a
+   equal to
+  4
+  4
+  . In fact, this choice is somewhat arbitrary and can be any number that is greater than or equal to the number of nucleotides. The idea is to choose a value that is large enough to avoid hash collisions while still being relatively small, so as to minimize the risk of arithmetic overflow.
+
+  Example: The polynomial hash value for the sequence
+  𝐴
+  𝑇
+  𝐺
+  ATG
+   will be
+
+  𝐻
+  (
+  𝐴
+  𝑇
+  𝐺
+  )
+  =
+  (
+  1
+  ×
+  4
+  2
+  )
+  +
+  (
+  4
+  ×
+  4
+  1
+  )
+  +
+  (
+  3
+  ×
+  4
+  0
+  )
+  =
+  35
+  H(ATG)=(1×4
+  2
+   )+(4×4
+  1
+   )+(3×4
+  0
+   )=35
+
+  Consider the same sequence
+  𝐴
+  𝐶
+  𝑇
+  𝐶
+  𝑇
+  ACTCT
+   with
+  𝑘
+  =
+  2
+  k=2
+  .
+
+  Initially, the sequence in the window is
+  𝐴
+  𝐶
+  AC
+  , and its hash value is:
+
+  𝐻
+  (
+  𝐴
+  𝐶
+  )
+  =
+  𝐻
+  (
+  𝐴
+  )
+  +
+  𝐻
+  (
+  𝐶
+  )
+  H(AC)=H(A)+H(C)
+
+  =
+  (
+  1
+  ×
+  4
+  1
+  )
+  +
+  (
+  2
+  ×
+  4
+  0
+  )
+  =(1×4
+  1
+   )+(2×4
+  0
+   )
+
+  =
+  6
+  =6
+
+  Since the above hash value has not been repeated yet, we add this hash value in the set and slide the window one character forward.
+
+  The sequence in the window is now
+  𝐶
+  𝑇
+  CT
+  . To compute the hash value of
+  𝐶
+  𝑇
+  CT
+  , we first need to remove the contribution of
+  𝐴
+  A
+   from the previous hash value:
+
+  𝐻
+  (
+  𝐶
+  )
+  =
+  𝐻
+  (
+  𝐴
+  𝐶
+  )
+  −
+  𝐻
+  (
+  𝐴
+  )
+  =
+  H(C)=H(AC)−H(A)=
+
+  =
+  6
+  −
+  (
+  1
+  ×
+  4
+  1
+  )
+  =6−(1×4
+  1
+   )
+
+  =
+  2
+  =2
+
+  and then add the contribution of
+  𝑇
+  T
+  :
+
+  𝐻
+  (
+  𝐶
+  𝑇
+  )
+  =
+  𝐻
+  (
+  𝐶
+  )
+  +
+  𝐻
+  (
+  𝑇
+  )
+  H(CT)=H(C)+H(T)
+
+  =
+  2
+  +
+  (
+  4
+  ×
+  4
+  0
+  )
+  =2+(4×4
+  0
+   )
+
+  =
+  6
+  =6
+
+  This can’t be right, since both
+  𝐴
+  𝐶
+  AC
+   and
+  𝐶
+  𝑇
+  CT
+   cannot yield the same hash value. Examining our work carefully, we notice that we are not correctly accounting for place values. So, we need to shift the remaining bases to the left by one position so that the hash corresponds to the new sliding window. We do this by multiplying the current hash value by the base value
+  𝑎
+  =
+  4
+  a=4
+  . This means that
+  𝐻
+  (
+  𝐶
+  )
+  H(C)
+   becomes
+  2
+  ×
+  4
+  1
+  2×4
+  1
+
+   and
+  𝐻
+  (
+  𝑇
+  )
+  H(T)
+   becomes
+  4
+  ×
+  4
+  0
+  4×4
+  0
+
+  . After that, we add the contribution of the incoming character
+  𝑇
+  T
+   to get the new hash value for the current sliding window:
+
+  𝐻
+  (
+  𝐶
+  𝑇
+  )
+  =
+  [
+  (
+  𝐻
+  (
+  𝐴
+  𝐶
+  )
+  −
+  𝐻
+  (
+  𝐴
+  )
+  )
+  ×
+  4
+  ]
+  +
+  𝐻
+  (
+  𝑇
+  )
+  H(CT)=[(H(AC)−H(A))×4]+H(T)
+
+  𝐻
+  (
+  𝐶
+  𝑇
+  )
+  =
+  [
+  6
+  −
+  (
+  1
+  ×
+  4
+  1
+  )
+  ]
+  ×
+  4
+  +
+  (
+  4
+  ×
+  4
+  0
+  )
+  H(CT)=[6−(1×4
+  1
+   )]×4+(4×4
+  0
+   )
+
+  =
+  12
+  =12
+
+  Since this hash value has not been seen yet, we add it to the set and slide the window one character forward.
+
+  The sequence in the window is now
+  𝑇
+  𝐶
+  TC
+  . We compute the hash value of
+  𝑇
+  𝐶
+  TC
+   in the same way as explained above:
+
+  𝐻
+  (
+  𝑇
+  𝐶
+  )
+  =
+  (
+  [
+  𝐻
+  (
+  𝐶
+  𝑇
+  )
+  −
+  𝐻
+  (
+  𝐶
+  )
+  ]
+  ×
+  4
+  )
+  +
+  𝐻
+  (
+  𝐶
+  )
+  H(TC)=([H(CT)−H(C)]×4)+H(C)
+
+  =
+  (
+  [
+  𝐻
+  (
+  𝐶
+  𝑇
+  )
+  −
+  (
+  2
+  ×
+  4
+  )
+  ]
+  ×
+  4
+  )
+  +
+  𝐻
+  (
+  𝐶
+  )
+  =([H(CT)−(2×4)]×4)+H(C)
+
+  =
+  (
+  [
+  12
+  −
+  8
+  ]
+  ×
+  4
+  )
+  +
+  2
+  =([12−8]×4)+2
+
+  =
+  (
+  4
+  ×
+  4
+  )
+  +
+  2
+  =(4×4)+2
+
+  =
+  16
+  +
+  2
+  =
+  18
+  =16+2=18
+
+  Since this hash value has not been seen yet, we add it to the set and slide the window one character forward. As you can see, even though
+  𝐶
+  𝑇
+  CT
+   and
+  𝑇
+  𝐶
+  TC
+   contain the same characters, since their relative order is different, the respective hash values of the two strings are also different.
+
+  The sequence in the window is now
+  𝐶
+  𝑇
+  CT
+  . We compute the hash value of
+  𝐶
+  𝑇
+  CT
+   in the same way as explained above:
+
+  𝐻
+  (
+  𝐶
+  𝑇
+  )
+  =
+  [
+  (
+  𝐻
+  (
+  𝑇
+  𝐶
+  )
+  −
+  𝐻
+  (
+  𝑇
+  )
+  )
+  ×
+  4
+  ]
+  +
+  𝐻
+  (
+  𝑇
+  )
+  H(CT)=[(H(TC)−H(T))×4]+H(T)
+
+  =
+  [
+  (
+  18
+  −
+  16
+  )
+  ×
+  4
+  ]
+  +
+  4
+  =[(18−16)×4]+4
+
+  =
+  [
+  2
+  ×
+  4
+  ]
+  +
+  4
+  =[2×4]+4
+
+  =
+  12
+  =12
+
+  This hash value is present in the set. Therefore, we add it to the output without checking if the sequences are identical.
+
+  From the above two approaches, it is clear that we will be using the polynomial rolling hash function in our solution to compute the hash values of the
+  𝑘
+  k
+  -length substrings since this method skips the need to compare two sequences if their hash values are the same and, therefore, helps us achieve constant-time hashing and comparison.
+
+  The slides below illustrate how the algorithm runs:
+
+  Press
+  +
+  to interact
+
+  canvasAnimation-image
+
+  1 of 15
+
+
+
+
+
+
+  Note: In the following section, we will gradually build the solution. Alternatively, you can skip straight to just the code.
+
+  Step-by-step solution construction
+  We will first define the following variables to set ourselves up to implement the polynomial rolling hash function:
+
+  mapping: This is a hash map defining the numeric mapping of nucleotides. It will be of the form:
+  {
+  𝐴
+  :
+  1
+  ,
+  𝐶
+  :
+  2
+  ,
+  𝐺
+  :
+  3
+  ,
+  𝑇
+  :
+  4
+  }
+  {A:1,C:2,G:3,T:4}
+  .
+  a: This is the base value used in the polynomial hash function. We will use a base value of
+  4
+  4
+   since there are
+  4
+  4
+   nucleotides in the sequence.
+  numbers: This is an array storing the integer form of the string s based on the mapping defined above. For example, for the sequence
+  𝐴
+  𝐶
+  𝑇
+  𝐶
+  𝑇
+  ACTCT
+  , numbers will consist of
+  [
+  1
+  ,
+  2
+  ,
+  4
+  ,
+  2
+  ,
+  4
+  ]
+  [1,2,4,2,4]
+  . This array will make it easier to access the numeric value of the nucleotides when calculating the hash value.
+
+  Java
+  12345678910111213141516171819202122232425262728
+  class RepeatedDNA {
+
+      public static void findRepeatedSequences(String s, int k) {
+
+          int n = s.length();
+
+          // Mapping of characters
+          Map<Character, Integer> mapping = new HashMap<>();
+          mapping.put('A', 1);
+          mapping.put('C', 2);
+
+
+  Run
+
+  Save
+
+  Reset
+  Repeated DNA Sequences
+  We declare a variable, hashValue, to store the hash value of the current
+  𝑘
+  k
+  -length sequence in the window. It is initialized to
+  0
+  0
+  .
+
+  Next, we slide the window along the string, s, using a pointer, i, ranging from
+  0
+  0
+   to
+  (
+  𝑛
+  −
+  𝑘
+  +
+  1
+  )
+  (n−k+1)
+  :
+
+  When i is
+  0
+  0
+  , the window is at its starting position, i.e., the first
+  𝑘
+  k
+  -length substring. For this sequence, we calculate the hash value from scratch using the above-mentioned polynomial hash function.
+
+  for (int j = 0; j < k; j++) {
+      hashValue += numbers.get(j) * (int) Math.pow(a, k - j - 1);
+  }
+  Otherwise, the window is not at its starting position. So, we calculate the hash value of the current
+  𝑘
+  k
+  -length substring by utilizing the hash value of the previous
+  𝑘
+  k
+  -length substring:
+
+  int previousHashValue = hashValue;
+  hashValue = ((previousHashValue - numbers.get(i - 1) * (int) Math.pow(a, k - 1)) * a) + numbers.get(i + k - 1);
+  The above process is repeated by sliding the window one character forward.
+
+
+  Java
+  12345678910111213141516171819202122232425262728
+  class RepeatedDNA {
+
+      public static void findRepeatedSequences(String s, int k) {
+
+          int n = s.length();
+
+          // Mapping of characters
+          Map<Character, Integer> mapping = new HashMap<>();
+          mapping.put('A', 1);
+          mapping.put('C', 2);
+
+
+  Run
+
+  Save
+
+  Reset
+  Repeated DNA Sequences
+  We declare the following variables to keep track of the hash values and store the repeated substrings:
+
+  hashSet: This is a set that stores all the unique hash values of the
+  𝑘
+  k
+  -length substrings. It is initialized to empty.
+
+  output: This is a set that stores the repeated substrings.
+
+  We check if the calculated hash value of the current
+  𝑘
+  k
+  -length substring is present in hashSet:
+
+  If it is, the substring is repeated, so it is added to output:
+
+  if (hashSet.contains(hashValue)) {
+     output.add(s.substring(i, i + k));
+  }
+  Otherwise, we will just add the hash value of the substring to hashSet:
+
+  hashSet.add(hashValue)
+  When the hash values of all
+  𝑘
+  k
+  -length substrings have been evaluated, i.e., the sliding window can not move forward, we return output.
+
+
+  Java
+  12345678910111213141516171819202122232425262728
+  class RepeatedDNA {
+
+      public static Set<String> findRepeatedSequences(String s, int k) {
+
+          int n = s.length();
+
+          // Mapping of characters
+          Map<Character, Integer> mapping = new HashMap<>();
+          mapping.put('A', 1);
+          mapping.put('C', 2);
+
+
+  Run
+
+  Save
+
+  Reset
+  Repeated DNA Sequences
+  The above solution works for most inputs. However, it will not work if the length of the string, s, is less than the window size, k. So, we need to handle this case by returning an empty set.
+
+
+  Java
+  3233343536373839404142434445464748495051525354555657585960
+                      hashValue += numbers.get(j) * (int) Math.pow(a, k - j - 1);
+                  }
+              } else {
+                  int previousHashValue = hashValue;
+                  hashValue = ((previousHashValue - numbers.get(i - 1) * (int) Math.pow(a, k - 1)) * a) + numbers.get(i + k - 1);
+              }
+
+              // If the current hash value is present in the hash set, the current substring has been repeated, so we add it to the output
+              if (hashSet.contains(hashValue)) {
+                  output.add(s.substring(i, i + k));
+
+
+  Run
+
+  Save
+
+  Reset
+  Repeated DNA Sequences
+  Just the code
+  Here’s the complete solution to this problem:
+
+
+  Java
+  26272824252122231819201516171213149101167834512
+  class RepeatedDNA {
+
+      public static Set<String> findRepeatedSequences(String s, int k) {
+
+          int n = s.length();
+
+          if (n < k) {
+              return new HashSet<String>();
+          }
+
+
+
+  Run
+
+  Save
+
+  Reset
+  Output
+  2.07s
+  1.	Input sequence: ACGT
+  	k: 3
+
+  	Repeated sequences: {}
+  ----------------------------------------------------------------------------------------------------
+  2.	Input sequence: AGACCTAGAC
+  	k: 3
+
+  	Repeated sequences: {GAC, AGA}
+  ----------------------------------------------------------------------------------------------------
+  3.	Input sequence: AAAAACCCCCAAAAACCCCCC
+  	k: 8
+
+  	Repeated sequences: {AAAAACCC, AAACCCCC, AAAACCCC}
+  ----------------------------------------------------------------------------------------------------
+  4.	Input sequence: GGGGGGGGGGGGGGGGGGGGGGGGG
+  	k: 12
+
+  	Repeated sequences: {GGGGGGGGGGGG}
+  ----------------------------------------------------------------------------------------------------
+  5.	Input sequence: TTTTTCCCCCCCTTTTTTCCCCCCCTTTTTTT
+  	k: 10
+
+  	Repeated sequences: {TTTTCCCCCC, CCCCTTTTTT, TTCCCCCCCT, CCCCCCCTTT, TTTCCCCCCC, TCCCCCCCTT, CCCCCTTTTT, TTTTTCCCCC, CCCCCCTTTT}
+  ----------------------------------------------------------------------------------------------------
+  6.	Input sequence: TTTTTGGGTTTTCCA
+  	k: 14
+
+  	Repeated sequences: {}
+  ----------------------------------------------------------------------------------------------------
+  7.	Input sequence: AAAAAACCCCCCCAAAAAAAACCCCCCCTG
+  	k: 10
+
+  	Repeated sequences: {AAAAACCCCC, AAAAAACCCC, AAACCCCCCC, AAAACCCCCC}
+  ----------------------------------------------------------------------------------------------------
+  8.	Input sequence: ATATATATATATATAT
+  	k: 6
+
+  	Repeated sequences: {ATATAT, TATATA}
+  ----------------------------------------------------------------------------------------------------
+
+  Repeated DNA Sequences
+  Solution summary
+  To recap, the solution to this problem can be divided into the following six main parts:
+
+  Iterate over all
+  𝑘
+  k
+  -length substrings.
+
+  Compute the hash value for the contents of the window.
+
+  Add this hash value to the set that keeps track of the hashes of all substrings of the given length.
+
+  Move the window one step forward and compute the hash of the new window using the rolling hash method.
+
+  If the hash value of a window has already been seen, the sequence in this window is repeated, so we add it to the output set.
+
+  Once all substrings have been evaluated, return the output set.
+
+  Time complexity
+  Average case
+
+  The average case time complexity of this solution is
+  𝑂
+  (
+  𝑛
+  )
+  O(n)
+  , where
+  𝑛
+  n
+   is the length of the input string. It is calculated as follows:
+
+  Time taken to populate the numbers array:
+  𝑂
+  (
+  𝑛
+  )
+  O(n)
+  .
+
+  Time taken to traverse all the
+  𝑘
+  k
+  -length substrings:
+  𝑂
+  (
+  𝑛
+  −
+  𝑘
+  +
+  1
+  )
+  O(n−k+1)
+  .
+
+  Time taken to calculate the hash value of a
+  𝑘
+  k
+  -length substring:
+  𝑂
+  (
+  1
+  )
+  O(1)
+  .
+
+  So, the dominating time complexity becomes
+  𝑂
+  (
+  𝑛
+  )
+  O(n)
+  .
+
+  Worst case
+
+  To understand the worst case time complexity of this solution, consider the input string “AAAAAAAA” with
+  𝑘
+  =
+  2
+  k=2
+  . This combination of inputs ensures that a repeated sequence “AA” is detected and added to the output each time the window slides forward. Therefore, we must generate a
+  𝑘
+  k
+  -length substring on each
+  (
+  𝑛
+  −
+  𝑘
+  +
+  1
+  )
+  (n−k+1)
+   iteration of the loop. The time to generate a
+  𝑘
+  k
+  -length substring is
+  𝑂
+  (
+  𝑘
+  )
+  O(k)
+  . Therefore, the overall time complexity becomes
+  𝑂
+  (
+  (
+  𝑛
+  −
+  𝑘
+  )
+  ×
+  𝑘
+  )
+  O((n−k)×k)
+  .
+
+  Space complexity
+  The space complexity of this solution is
+  𝑂
+  (
+  𝑛
+  )
+  O(n)
+  . It is calculated as follows:
+
+  Space occupied by the mapping hash map:
+  𝑂
+  (
+  1
+  )
+  O(1)
+  .
+
+  Space occupied by the numbers array:
+  𝑂
+  (
+  𝑛
+  )
+  O(n)
+  .
+
+  Space occupied by the hashSet set:
+  𝑂
+  (
+  𝑛
+  −
+  𝑘
+  +
+  1
+  )
+  O(n−k+1)
+  .
+
+  So, the dominating space complexity becomes
+  𝑂
+  (
+  𝑛
+  )
+  O(n)
+  .
+
