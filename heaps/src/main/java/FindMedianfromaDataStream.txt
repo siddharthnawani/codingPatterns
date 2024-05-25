@@ -1,0 +1,329 @@
+Create a data structure that can store a list of integers that can change in size over time and find the median from this dynamically growing list in constant time,
+𝑂
+(
+1
+)
+O(1)
+.
+
+Implement a class, MedianOfStream, which should support the following operations:
+
+Constructor(): This initializes the object of this class, which in turn creates the max and the min heap.
+
+Insert Num(num): This adds an integer, num, to the data structure.
+
+Find Median(): This finds the median of all elements seen so far. If there are an even number of elements, return the average of the two middle values.
+
+Constraints:
+
+−
+1
+0
+5
+≤
+−10
+5
+ ≤
+ num
+≤
+1
+0
+5
+≤10
+5
+
+, where num is an integer received from the data stream.
+
+There will be at least one element in the data structure before the median is computed.
+
+At most,
+500
+500
+ calls will be made to the function that calculates the median.
+
+
+ Solution: Find Median from a Data Stream
+ Let's solve the Find Median from a Data Stream problem using the Two Heaps pattern.
+
+ We'll cover the following
+
+ Statement
+ Solution
+ Naive approach
+ Optimized approach using two heaps
+ Solution summary
+ Time complexity
+ Space complexity
+ Statement
+ Create a data structure that can store a list of integers that can change in size over time and find the median from this dynamically growing list in constant time,
+ 𝑂
+ (
+ 1
+ )
+ O(1)
+ .
+
+ Implement a class, MedianOfStream, which should support the following operations:
+
+ Constructor(): This initializes the object of this class, which in turn creates the max and the min heap.
+
+ Insert Num(num): This adds an integer, num, to the data structure.
+
+ Find Median(): This finds the median of all elements seen so far. If there are an even number of elements, return the average of the two middle values.
+
+ Constraints:
+
+ −
+ 1
+ 0
+ 5
+ ≤
+ −10
+ 5
+  ≤
+  num
+ ≤
+ 1
+ 0
+ 5
+ ≤10
+ 5
+
+ , where num is an integer received from the data stream.
+
+ There will be at least one element in the data structure before the median is computed.
+
+ At most,
+ 500
+ 500
+  calls will be made to the function that calculates the median.
+
+ Solution
+ So far, you’ve probably brainstormed some approaches and have an idea of how to solve this problem. Let’s explore some of these approaches and figure out which one to follow based on considerations such as time complexity and any implementation constraints.
+
+ Naive approach
+ The naive solution is to first sort the data and then find the median. Insertion sort is an algorithm that can be used to sort the data as it appears. This way, every time a new number is added to the stream, the numbers before that new number are already sorted, allowing insertion at the correct index. This, however, also requires us to shift the elements greater than the inserted number one place forward.
+
+ The overall time complexity of the algorithm becomes
+ 𝑂
+ (
+ 𝑛
+ 2
+ )
+ O(n
+ 2
+  )
+ , where
+ 𝑛
+ n
+  is the number of elements in the data stream. The amortized time complexity of each insertion is therefore
+ 𝑂
+ (
+ 𝑛
+ 2
+ 𝑛
+ )
+ O(
+ n
+ n
+ 2
+
+ ​
+  )
+ , that is,
+ 𝑂
+ (
+ 𝑛
+ )
+ O(n)
+ . The time complexity of the function that calculates the median would be
+ 𝑂
+ (
+ 1
+ )
+ O(1)
+ , assuming we are storing the data in an array. The space complexity is
+ 𝑂
+ (
+ 1
+ )
+ O(1)
+ .
+
+ Optimized approach using two heaps
+ We’ll assume that x is the median of the integers in a list. Half of the numbers in the list will be smaller than (or equal to) x, and the other half will be greater than (or equal to) x. We can divide the list into two halves. One half stores the smaller numbers, and the other half stores the larger numbers.
+
+ The median of all numbers will either be the largest number in the small list or the smallest number in the large list. If the total number of elements is even, we know that the median will be the average of these two numbers.
+
+ The most efficient data structure for repeatedly finding the smallest or largest number in a changing list is a heap. We can store the first half of the numbers in a max-heap and the second half in a min-heap. That’s why the two heaps pattern is a perfect fit.
+
+ Here’s how we’ll implement this algorithm:
+
+ First, we’ll store the first half of the numbers (smaller than x) in a max-heap. We use a max-heap because we want to know the largest number in the first half of the list.
+
+ Then, we’ll store the second half of the numbers (larger than x) in a min-heap because we want to know the smallest number in the second half of the list.
+
+ We can calculate the median of the current list of numbers using the top element of the two heaps.
+
+ We have an odd number of elements,and the length of max-heap is greater thanmin-heap. The median will be the top element ofour max-heap.
+ input number
+ min-heap
+ 30
+ 35
+ max-heap
+ 22
+ 16
+ 18
+ median = 22.0
+ 11 of 11
+
+
+
+
+
+
+ Let’s look at the code for this solution below:
+
+
+ Solution
+
+ Commented Solution
+ 24252627282930313233343536373839404142434445464748495051
+   public void insertNum(int num) {
+     if (maxHeapForSmallNum.isEmpty() || maxHeapForSmallNum.peek() >= num)
+       maxHeapForSmallNum.add(num);
+     else
+       minHeapForLargeNum.add(num);
+
+     if (maxHeapForSmallNum.size() > minHeapForLargeNum.size() + 1)
+       minHeapForLargeNum.add(maxHeapForSmallNum.poll());
+     else if (maxHeapForSmallNum.size() < minHeapForLargeNum.size())
+       maxHeapForSmallNum.add(minHeapForLargeNum.poll());
+
+
+ Run
+
+ Save
+
+ Reset
+ Output
+ 1.36s
+ 1.	Data stream: [35]
+ 	The median for the given numbers is: 35.0
+ ----------------------------------------------------------------------------------------------------
+ 2.	Data stream: [35, 22]
+ 	The median for the given numbers is: 28.5
+ ----------------------------------------------------------------------------------------------------
+ 3.	Data stream: [35, 22, 30]
+ 	The median for the given numbers is: 30.0
+ ----------------------------------------------------------------------------------------------------
+ 4.	Data stream: [35, 22, 30, 25]
+ 	The median for the given numbers is: 27.5
+ ----------------------------------------------------------------------------------------------------
+ 5.	Data stream: [35, 22, 30, 25, 1]
+ 	The median for the given numbers is: 25.0
+ ----------------------------------------------------------------------------------------------------
+
+ Find Median from a Data Stream
+ Solution summary
+ To recap, the solution to this problem can be divided into the following parts:
+
+ Use a min-heap to store the larger 50% of the numbers seen so far and a max-heap for the smaller 50% of the numbers.
+ Add the incoming elements to the appropriate heaps.
+ Calculate the median using the top elements of the two heaps.
+ Time complexity
+ The time complexity of the Insert Num method will change depending on how many numbers have already been received from the stream. So, the time complexity is amortized over the number of insert operations.
+
+ Each insert operation will trigger a heapify process that runs in
+ 𝑂
+ (
+ log
+ ⁡
+ 𝑛
+ )
+ O(logn)
+  times, where
+ 𝑛
+ n
+  is the count of numbers received so far from the stream. Because of this, the cumulative complexity of a sequence of
+ 𝑛
+ n
+  insert operations is described by the expression
+ log
+ ⁡
+ 1
+ +
+ log
+ ⁡
+ 2
+ +
+ log
+ ⁡
+ 3
+ +
+ …
+ +
+ log
+ ⁡
+ 𝑛
+ log1+log2+log3+…+logn
+ .
+
+ This expression simplifies to
+ log
+ ⁡
+ 𝑛
+ !
+ logn!
+ , which, as per Stirling’s approximation, is
+ 𝑂
+ (
+ 𝑛
+ log
+ ⁡
+ 𝑛
+ )
+ O(nlogn)
+ . As we have performed
+ 𝑛
+ n
+  insert operations, the amortized time complexity of one insert operation is
+ 𝑂
+ (
+ 𝑛
+ log
+ ⁡
+ 𝑛
+ 𝑛
+ )
+ O(
+ n
+ nlogn
+ ​
+  )
+ , that is,
+ 𝑂
+ (
+ log
+ ⁡
+ 𝑛
+ )
+ O(logn)
+ .
+
+ The time complexity of the Find Median method will be
+ 𝑂
+ (
+ 1
+ )
+ O(1)
+  since retrieving the top element of a heap is a constant-time operation, and we need to do at most two such retrievals.
+
+ Space complexity
+ The space complexity will be
+ 𝑂
+ (
+ 1
+ )
+ O(1)
+  since no additional space is used other than that which is required to store the numbers received from the data stream.

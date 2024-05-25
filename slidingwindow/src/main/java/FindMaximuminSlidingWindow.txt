@@ -1,0 +1,551 @@
+Statement
+Given an integer list, nums, find the maximum values in all the contiguous subarrays (windows) of size w.
+
+Statement
+Given an integer array nums, find the maximum values in all the contiguous subarrays (windows) of size w.
+
+Constraints:
+
+1
+1
+
+≤
+≤
+ nums.length
+≤
+≤
+
+1
+0
+3
+10
+3
+
+−
+1
+0
+4
+−10
+4
+
+
+≤
+≤
+ nums[i]
+≤
+≤
+
+1
+0
+4
+10
+4
+
+1
+1
+
+≤
+≤
+ w
+≤
+≤
+ nums.length
+Solution
+So far, you’ve probably brainstormed some approaches on how to solve this problem. Let’s explore some of these approaches and figure out which one to follow while considering time complexity and any implementation constraints.
+
+Naive approach
+A naive approach is to slide the window over the input array and find the maximum in each window separately. We iterate over the input array, calculating the maximum element in each window linearly, and then adding it to the output array. In each subsequent iteration, we update the current window by removing the first element from the current window and adding the incoming element of the input array. Once we are done iterating the input array, we return the output array, containing the maximums of all
+(
+𝑛
+−
+𝑤
++
+1
+)
+(n−w+1)
+ windows.
+
+The time complexity of this approach is
+𝑂
+(
+𝑛
+×
+𝑤
+)
+O(n×w)
+. Since we only iterate over the input array once to find all the windows, the time complexity of this part will be
+𝑂
+(
+𝑛
+)
+O(n)
+. Furthermore, removing the first element, adding the incoming element, and finding the maximum element in the window take
+𝑂
+(
+𝑤
+)
+O(w)
+ time. The space complexity of this approach is
+𝑂
+(
+𝑤
+)
+O(w)
+, since we maintain an array for the window.
+
+Optimized approach using sliding window
+Our first solution uses the sliding window technique to solve the problem. However, there is much room for improvement. In the following section, we will gradually optimize our naive approach to reduce the time complexity to
+𝑂
+(
+𝑛
+)
+O(n)
+.
+
+Note: In the following section, we will gradually build the solution. Alternatively, you can skip straight to just the code.
+
+Step-by-step solution construction
+Firstly, instead of adding values to currentWindow, we use their indexes. By doing this, we can easily check which index has fallen out of the current window and remove it.
+
+Secondly, we process the elements of the first window as follows:
+
+Every time we add a new index to currentWindow, we clean it up, i.e., we iterate backward over currentWindow, starting from the end, and remove all the indexes whose corresponding values in the input array are smaller than or equal to the new element in the window. Let’s understand how this step benefits us. Whenever a new element enters the window, all the previous elements smaller than the current element can no longer be the maximum in the current or any subsequent windows containing the new element. This is because all the subsequent windows holding the indexes of the removed elements will also include the new, bigger element. Since this new element is bigger than those elements, keeping those smaller elements in currentWindow is unnecessary.
+
+A key detail to note here is that we perform the clean-up step starting with the second element added to the first window. As a result, even in the first window, we will have excluded all elements smaller than the maximum of that window that occurs before it in the input array.
+
+Let’s understand this using an initial frame of five elements,
+[
+2
+,
+4
+,
+5
+,
+3
+,
+1
+]
+[2,4,5,3,1]
+. When the index of
+4
+4
+ is added to currentWindow, it causes the index of
+2
+2
+ to be deleted. The addition of the index of
+5
+5
+ causes the index of
+4
+4
+ to be deleted. However, the addition of the indexes of
+3
+3
+ and
+1
+1
+ does not trigger any deletions. At the end of this clean-up process, currentWindow contains the indexes,
+[
+2
+,
+3
+,
+4
+]
+[2,3,4]
+, corresponding to the values,
+[
+5
+,
+3
+,
+1
+]
+[5,3,1]
+.
+
+Once we have cleaned up the first window, the remaining indexes in currentWindow will be stored in the descending order of their values. Now, let’s imagine the other possibility where the first frame actually contains
+[
+2
+,
+4
+,
+5
+,
+1
+,
+3
+]
+[2,4,5,1,3]
+. Here, the addition of the index of
+1
+1
+ does not trigger any deletion, but
+3
+3
+ does cause the index of
+1
+1
+ to be deleted. currentWindow now holds the indexes
+[
+2
+,
+4
+]
+[2,4]
+, corresponding to the values
+[
+5
+,
+3
+]
+[5,3]
+, which are sorted in descending order. Since we’ve examined both possibilities (either the elements in nums after element
+5
+5
+ are in descending order, or they aren’t), we can be sure that, after the clean-up process, the index of the maximum element in the first window will always be stored at the start of currentWindow.
+
+We append the value corresponding to the index at the start of currentWindow to our output array.
+
+Next, we iterate over the remaining input array. For each element, we perform the clean-up step as we did for the elements of the first window.
+
+One difference when processing the second and all subsequent windows, compared to the processing of the first window, is an additional check that is carried out before we append the current element in nums to currentWindow. We check whether the first index in currentWindow is still a part of the current window. If not, we remove the first index from currentWindow.
+
+Lastly, when the entire input array has been processed, one window at a time, we return the output array containing the maximum of each window.
+
+Let’s understand this algorithm with the help of an illustration:
+
+Press
++
+to interact
+
+canvasAnimation-image
+
+1 of 12
+
+
+
+
+
+
+Now, let’s analyze the algorithm in terms of complexity. We are still moving over the input array in
+𝑂
+(
+𝑛
+)
+O(n)
+ time and using the sliding window approach to maintain currentWindow. Inside the loop, we append the new element to currentWindow, which takes
+𝑂
+(
+1
+)
+O(1)
+ time. The time complexity of the clean-up step is
+𝑂
+(
+1
+)
+O(1)
+, which is explained in detail in the complexity analysis of the final solution. Lastly, we remove the index that no longer falls in the current window. Since this element is removed from the start of the array, the time complexity of removing this index will be
+𝑂
+(
+𝑤
+)
+O(w)
+. Therefore, the overall time complexity of this solution will be
+𝑂
+(
+𝑛
+×
+𝑤
+)
+O(n×w)
+. The space complexity of this solution is
+𝑂
+(
+𝑤
+)
+O(w)
+, since we maintain an array to store the indexes of significant elements from the current window.
+
+
+Java
+12345678910111213141516171819202122232425262728
+import java.util.*;
+import java.util.stream.*;
+
+class SlidingWindowMaximum {
+	// function to clean up the window
+	public static ArrayList<Integer> cleanUp(int i, ArrayList<Integer> currentWindow, int[] nums) {
+		// remove all the indexes from currentWindow whose corresponding values are smaller than or equal to the current element
+		while (currentWindow.size() != 0 && nums[i] >= nums[currentWindow.get(currentWindow.size() - 1)]) {
+			System.out.println("\t\tAs nums[" + i + "] = " + nums[i] + " i
+
+Run
+
+Save
+
+Reset
+First optimization with current window as an array
+In the first optimization, we eliminated the additional creation of currentWindow, reducing the time complexity by a significant factor. Let’s see if we can further improve our solution.
+
+At the moment, we are incurring two kinds of costs. The first cost is of iterating over the input array while sliding the window forward. No matter what approach we use, we cannot eliminate this cost. The second cost is of removing the first element from the array currentWindow. The array data structure will always impose this cost. Therefore, we need a data structure that removes elements in constant time both from the end and from the start.
+
+The data structure that supports constant-time removals from both ends is a deque. A deque is a double-ended queue where the Push() and Pop() operations work in
+𝑂
+(
+1
+)
+O(1)
+ time at both ends. Therefore, just by maintaining currentWindow as a deque instead of as an array, we can reduce the time complexity of the above solution to
+𝑂
+(
+𝑛
+)
+O(n)
+. This is the most optimized solution for solving this problem. The space complexity of the solution will still be
+𝑂
+(
+𝑤
+)
+O(w)
+—the maximum number of elements in the current window stored in the deque.
+
+
+Java
+12345678910111213141516171819202122232425262728
+import java.util.*;
+import java.util.stream.*;
+
+class SlidingWindowMaximum {
+	// function to clean up the window
+	public static Deque<Integer> cleanUp(int i, Deque<Integer> currentWindow, int[] nums) {
+		// remove all the indexes from currentWindow whose corresponding values are smaller than or equal to the current element
+		while (currentWindow.size() != 0 && nums[i] >= nums[currentWindow.getLast()]) {
+			System.out.println("\t\tAs nums[" + i + "] = " + nums[i] + " is greater than or equal to n
+
+Run
+
+Save
+
+Reset
+Second optimization with current window as a deque
+Just the code
+Here’s the complete solution to this problem:
+
+
+Java
+12345678910111213141516171819202122232425262728
+import java.util.*;
+import java.util.stream.*;
+
+class SlidingWindowMaximum {
+	// function to clean up the window
+	public static Deque<Integer> cleanUp(int i, Deque<Integer> currentWindow, int[] nums) {
+		while (currentWindow.size() != 0 && nums[i] >= nums[currentWindow.getLast()]) {
+			currentWindow.removeLast();
+		}
+		return currentWindow;
+
+
+Run
+
+Save
+
+Reset
+Find Maximum in Sliding Window
+Solution summary
+To recap, the solution can be divided into the following parts:
+
+First, we check if the input array contains only one element. If it does, we directly return the input array because there is only one maximum element.
+
+Then, we process the first
+𝑤
+w
+ elements of the input array. We will use a deque to store the indexes of the candidate maximums of each window.
+
+For each element, we perform the clean-up step, removing the indexes of the elements from the deque whose values are smaller than or equal to the value of the element we are about to add to the deque. Then, we append the index of the new element to the back of the deque.
+
+After the first
+𝑤
+w
+ elements have been processed, we append the element whose index is present at the front of the deque to the output array, since it is the maximum in the first window.
+
+After finding the maximum in the first window, we iterate over the remaining input array. For each element, we repeat Step 3 as we did for the first
+𝑤
+w
+ elements.
+
+Additionally, in each iteration, before appending the index of the current element to the deque, we check if the first index in the deque has fallen out of the current window. If so, we remove it from the deque.
+
+Finally, we return the array containing the maximum elements of each window.
+
+Time complexity
+The input parameters of the function are an array of integers and an integer specifying the size of the window. In the discussion that follows, we will use
+𝑛
+n
+ to represent the size of the array of integers, and
+𝑤
+w
+ to represent the size of the window.
+
+To get a clearer understanding of the time complexity of our solution, we need to consider the different ways in which the values in the input array change. The values in the array can be:
+
+Strictly increasing
+Strictly decreasing
+Constant
+Mixed, i.e, increasing, decreasing, constant, then decreasing again, then constant, then increasing, then constant and then decreasing
+On the surface, we might expect our solution to take
+𝑂
+(
+𝑛
+∗
+𝑤
+)
+O(n∗w)
+, but that would be no better than the naive solution. When we look closer at our solution, it comes down to figuring out how many times the clean-up loop actually runs. This is the loop that pops all elements from the deque that are smaller than the new element in the window.
+
+Let’s consider the first case when the values in the array are strictly increasing. The first time the window moves forward, the new element is larger than all the other elements in the deque. Therefore, we have to perform the removeLast() operation
+𝑤
+w
+ times. Then, in all the subsequent steps, the removeLast() operation is performed only once, since the deque will only contain one element from this point onward. The number of subsequent steps is
+𝑛
+−
+𝑤
+n−w
+. So, the complexity in this case is
+𝑂
+(
+𝑤
++
+𝑛
+−
+𝑤
+)
+O(w+n−w)
+, that is,
+𝑂
+(
+𝑛
+)
+O(n)
+.
+
+In the second case, every time the window moves forward, the new element is smaller than all the other elements in the deque. Therefore, the removeFirst() operation is only performed once in every subsequent step to remove the element that does not fall in the window anymore. So, the time complexity in this case is
+𝑂
+(
+𝑛
+−
+𝑤
++
+1
+)
+O(n−w+1)
+, that is,
+𝑂
+(
+𝑛
+−
+𝑤
+)
+O(n−w)
+.
+
+In the third case, the same behavior is repeated as in the second case, so the time complexity is
+𝑂
+(
+𝑛
+−
+𝑤
+)
+O(n−w)
+ here, too.
+
+Finally, in the fourth case, the time complexity for increasing values as well as decreasing and constant values will be the same as explained above. The only other situation is when the values increase after staying constant, or right after a sequence of decreasing numbers. In either case, we incur a cost of
+𝑂
+(
+𝑤
+)
+O(w)
+, since we clean up the deque using the removeLast() operation. If there is an increase in the value after every
+𝑤
+w
+ elements, we pay the
+𝑂
+(
+𝑤
+)
+O(w)
+ cost to clean up the deque. This can only happen
+𝑛
+𝑤
+w
+n
+​
+
+ times. The cost of filling up the deque while the elements are constant or decreasing will be
+𝑂
+(
+𝑤
+)
+O(w)
+. So, the total cost with such data will be
+𝑂
+(
+(
+𝑤
++
+𝑤
+)
+(
+𝑛
+𝑤
+)
+)
+O((w+w)(
+w
+n
+​
+ ))
+, that is,
+𝑂
+(
+2
+𝑤
+(
+𝑛
+𝑤
+)
+)
+O(2w(
+w
+n
+​
+ ))
+ or
+𝑂
+(
+𝑛
+)
+O(n)
+.
+
+Hence, the time complexity of the solution, considering the worst of these four cases, is
+𝑂
+(
+𝑛
+)
+O(n)
+.
+
+Space complexity
+The space complexity of this solution is
+𝑂
+(
+𝑤
+)
+O(w)
+, where
+𝑤
+w
+ is the window size.
