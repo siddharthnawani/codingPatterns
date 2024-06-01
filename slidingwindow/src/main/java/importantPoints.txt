@@ -1,9 +1,0 @@
-For a heap containing
-𝑛
-elements, inserting or removing an element takes
-
-O(logn)
- time, while accessing the element at the root is done in
-
-O(1)
- time. The root stores the smallest element in the case of a min heap and the largest element in the case of a max heap.

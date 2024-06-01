@@ -1,0 +1,12 @@
+For a heap containing
+𝑛
+elements, inserting or removing an element takes
+
+O(logn)
+ time, while accessing the element at the root is done in
+
+O(1)
+ time. The root stores the smallest element in the case of a min heap and the largest element in the case of a max heap.
+
+ You are correct: it's Θ(𝑛)
+  in the worst case. Suppose you're looking for something that's no bigger than the smallest value in a max-heap. The max-heap property (that the value of every node is at least as big as everything in the subtree below it) gives you no useful information and you must check both subtrees of every node.
