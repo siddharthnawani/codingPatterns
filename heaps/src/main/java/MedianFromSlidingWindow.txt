@@ -1,0 +1,16 @@
+Statement
+Given an integer array, nums, and an integer, k, there is a sliding window of size k, which is moving from the very left to the very right of the array. We can only see the k numbers in the window. Each time the sliding window moves right by one position.
+
+Given this scenario, return the median of the each window. Answers within
+1
+0
+−
+5
+10
+−5
+
+ of the actual value will be accepted.
+
+Inutition
+
+If we can maintain 2 Heaps - maxHeap and minHeap, where maxHeap stores the smaller half values and minHeap stores the larger half values, so that any point of time the top most element of the 2 heaps will provide the median.

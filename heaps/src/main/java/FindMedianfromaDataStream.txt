@@ -327,3 +327,150 @@ At most,
  )
  O(1)
   since no additional space is used other than that which is required to store the numbers received from the data stream.
+
+
+  Solution summary
+  To recap, the solution to this problem can be divided into the following parts:
+
+  Populate max-heap with k elements.
+  Transfer
+  ⌊
+  𝑘
+  2
+  ⌋
+  ⌊
+  2
+  k
+  ​
+   ⌋
+   elements from the max-heap to the min-heap.
+  If the window size is odd, the median is the top of the max-heap. Otherwise, it’s the mean of the top elements of the two heaps.
+  Move the window forward and add the outgoing number in the hash map, which is used to track the outgoing numbers.
+  Rebalance the heaps if they have more elements.
+  If the top element of the max-heap or the min-heap is present in the hash map with a frequency greater than 0, this element is irrelevant. We remove it from the respective heap and the hash map.
+  Repeat the process until all elements are processed.
+  Time complexity
+  The time spent in creating the heaps is
+  𝑂
+  (
+  𝑘
+  𝑙
+  𝑜
+  𝑔
+  𝑘
+  )
+  O(klogk)
+  . As we process all elements in the loop, it runs for
+  𝑂
+  (
+  𝑛
+  −
+  𝑘
+  )
+  O(n−k)
+   time, where
+  𝑛
+  n
+   is the size of the input array. Inside the loop, we push and pop elements from the heaps, which takes
+  𝑂
+  (
+  𝑙
+  𝑜
+  𝑔
+  (
+  𝑛
+  −
+  𝑘
+  )
+  )
+  O(log(n−k))
+   time. This is because the size of a heap can grow up to
+  𝑂
+  (
+  𝑛
+  −
+  𝑘
+  )
+  O(n−k)
+   in the worst case. Therefore, the total time complexity of the algorithm above is
+  𝑂
+  (
+  𝑘
+  𝑙
+  𝑜
+  𝑔
+  𝑘
+  )
+  +
+  𝑂
+  (
+  (
+  𝑛
+  −
+  𝑘
+  )
+  ∗
+  𝑙
+  𝑜
+  𝑔
+  (
+  𝑛
+  −
+  𝑘
+  )
+  )
+  O(klogk)+O((n−k)∗log(n−k))
+  . As
+  𝑘
+  ≤
+  𝑛
+  k≤n
+  , the time complexity can be represented as
+  𝑂
+  (
+  𝑛
+  𝑙
+  𝑜
+  𝑔
+  𝑛
+  )
+  O(nlogn)
+  .
+
+  Space complexity
+  As the size of a heap can grow up to
+  𝑂
+  (
+  𝑛
+  −
+  𝑘
+  )
+  O(n−k)
+   in the worst case, the space occupied by it is
+  𝑂
+  (
+  𝑛
+  −
+  𝑘
+  )
+  O(n−k)
+  . Similarly, the space occupied by the hash map will also be
+  𝑂
+  (
+  𝑛
+  −
+  𝑘
+  )
+  O(n−k)
+  . As
+  𝑘
+  ≤
+  𝑛
+  k≤n
+  , the space complexity of the above algorithm is
+  𝑂
+  (
+  𝑛
+  )
+  O(n)
+  .
