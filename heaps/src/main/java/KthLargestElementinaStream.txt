@@ -1,0 +1,308 @@
+Given an infinite stream of integers (sorted or unsorted), nums, design a class to find the
+𝑘
+𝑡
+ℎ
+k
+th
+
+ largest element in a stream.
+
+ Solution
+ So far, you have probably brainstormed some approaches and have an idea of how to solve this problem. Let’s explore some of these approaches and figure out which one to follow based on considerations such as time complexity and any implementation constraints.
+
+ Naive approach
+ The naive solution is to first sort the data and then find the
+ 𝑘
+ 𝑡
+ ℎ
+ k
+ th
+
+  largest element. Insertion sort is an algorithm that can be used to sort the data as it appears. However, it also requires shifting the elements, greater than the inserted number, one place forward.
+
+ The overall time complexity of the algorithm becomes
+ 𝑂
+ (
+ 𝑛
+ 2
+ )
+ O(n
+ 2
+  )
+ , where
+ 𝑛
+ n
+  is the number of elements in the data stream. The time complexity of each insertion is
+ 𝑂
+ (
+ 𝑛
+ )
+ O(n)
+  and finding the
+ 𝑘
+ 𝑡
+ ℎ
+ k
+ th
+
+  largest element would take
+ 𝑂
+ (
+ 1
+ )
+ O(1)
+  time, assuming we are storing the data in an array. The space complexity is
+ 𝑂
+ (
+ 1
+ )
+ O(1)
+ .
+
+ Optimized approach using Top K Elements
+ As new elements are added to the number stream, the
+ 𝑘
+ 𝑡
+ ℎ
+ k
+ th
+
+  largest element keeps changing. We need to implement a class that caters to the dynamically changing numbers. The most efficient data structure for repeatedly finding the
+ 𝑘
+ 𝑡
+ ℎ
+ k
+ th
+
+  largest number in a changing list is a heap.
+
+ We’ll implement a min-heap of size
+ 𝑘
+ k
+ . In a min-heap, the smallest number is always at the top. We’ll use this property to design a solution that ensures that in a min-heap with
+ 𝑘
+ k
+  elements, the
+ 𝑘
+ 𝑡
+ ℎ
+ k
+ th
+
+  largest element is always at the top of the heap.
+
+ The slides below illustrate the core ideas of our algorithm:
+
+ Press
+ +
+ to interact
+
+ canvasAnimation-image
+
+ 11 of 11
+
+
+
+
+
+
+ Note: In the following section, we will gradually build the solution. Alternatively, you can skip straight to just the code.
+
+ Step-by-step solution construction
+ We’ll start by defining the constructor. In the constructor, we initialize k and create a min-heap using the elements from the provided array. We then iterate through the elements and add them to the heap by calling the add function, which will be implemented later on.
+
+
+ Java
+ 1920212223242526272829303132181715161413121110987654
+ import java.util.*;
+
+ class KthLargest {
+     public PriorityQueue<Integer> topKHeap;
+     public int k;
+
+     // Constructor to initialize heap and add values in it
+     public KthLargest(int k, int[] nums) {
+         System.out.println("\n\tInitializing the heap");
+         this.k = k;
+
+
+ Run
+
+ Save
+
+ Reset
+ Kth Largest Element in a Stream
+ Next, we’ll implement the add function, which adds an incoming number to the stream. If the heap size is less than
+ 𝑘
+ k
+ , we’ll simply push the value into the heap. Otherwise, if the incoming value is greater than the smallest element (top of the heap), we’ll perform a pop operation to remove the smallest element and then push the new value into the heap. This ensures that the heap maintains only the k largest elements. Since we’re working with a min-heap, the
+ 𝑘
+ 𝑡
+ ℎ
+ k
+ th
+
+  largest element will always be at the top of the heap.
+
+
+ Java
+ 12345678910111213141516171819202122232425262728
+ import java.util.*;
+
+ class KthLargest {
+     public PriorityQueue<Integer> topKHeap;
+     public int k;
+
+     // Constructor to initialize heap and add values in it
+     public KthLargest(int k, int[] nums) {
+         System.out.println("\tInitializing the heap");
+         this.k = k;
+
+
+ Run
+
+ Save
+
+ Reset
+ Kth Largest Element in a Stream
+ We know that the
+ 𝑘
+ 𝑡
+ ℎ
+ k
+ th
+
+  largest element is the top element of the heap. After adding the new element to the heap, we’ll return its top element.
+
+
+ Java
+ 2728252623242122201819293031323334353637383940414243444546
+ import java.util.*;
+
+ class KthLargest {
+     public PriorityQueue<Integer> topKHeap;
+     public int k;
+
+ 	// Constructor to initialize heap and add values in it
+     public KthLargest(int k, int[] nums) {
+         System.out.println("\tInitializing the heap");
+         this.k = k;
+
+
+ Run
+
+ Save
+
+ Reset
+ Kth Largest Element in a Stream
+ Just the code
+ Here’s the complete solution to this problem:
+
+
+ Java
+ 28272625242322212018191716151412131110897645321
+ import java.util.*;
+
+ class KthLargest {
+     public PriorityQueue<Integer> topKHeap;
+     public int k;
+
+ 	// Constructor to initialize heap and add values in it
+     public KthLargest(int k, int[] nums) {
+         this.k = k;
+         topKHeap = new PriorityQueue<>();
+
+
+ Run
+
+ Save
+
+ Reset
+ Kth Largest Element in a Stream
+ Solution summary
+ To recap, the solution to this problem can be divided into the following parts:
+
+ Initialize a min-heap in the constructor to store the elements. Iterate through the elements in nums and call the add function for each element.
+ In the add function, if the size of the heap is less than
+ 𝑘
+ k
+ , push the number into the heap. Otherwise, if the incoming value is greater than the smallest element (top of the heap), perform a pop operation to remove the smallest element, and then push the new value into the heap.
+ After adding all the numbers, the
+ 𝑘
+ 𝑡
+ ℎ
+ k
+ th
+
+  largest element can be found at the root of the heap.
+ Time complexity
+ Init(nums, k): In the constructor, we iterate through the nums list with
+ 𝑛
+ n
+  elements and add them to the heap. Adding each element to the heap takes, at most,
+ 𝑂
+ (
+ log
+ ⁡
+ 𝑘
+ )
+ O(logk)
+  time. Therefore, the overall time complexity of the constructor is
+ 𝑂
+ (
+ 𝑛
+ log
+ ⁡
+ 𝑘
+ )
+ O(nlogk)
+ .
+
+ Add(value): In the add function, we perform operations like pushing and popping elements from the heap, which take, at most,
+ 𝑂
+ (
+ log
+ ⁡
+ 𝑘
+ )
+ O(logk)
+  time. Therefore, the time complexity of the add function is
+ 𝑂
+ (
+ log
+ ⁡
+ 𝑘
+ )
+ O(logk)
+ .
+
+ Space complexity
+ The space complexity will be
+ 𝑂
+ (
+ 𝑘
+ )
+ O(k)
+  where
+ 𝑘
+ k
+  is the
+ 𝑘
+ 𝑡
+ ℎ
+ k
+ th
+
+  largest element we need to find in a stream. This is because the heap is initialized to have a maximum size of
+ 𝑘
+ k
+ , resulting in an overall space complexity of
+ 𝑂
+ (
+ 𝑘
+ )
+ O(k)
+ .
+
+
+ Back

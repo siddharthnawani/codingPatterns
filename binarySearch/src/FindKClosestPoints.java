@@ -8,13 +8,16 @@ public class FindKClosestPoints {
     public static void main(String[] args) {
 
         int[][]inputs={
+            {0,1,2,3,4,5},
+            {0,1,2,4,5},
+            {1, 2, 3, 4, 5, 6, 7},
                 {1, 2, 3, 4, 5, 6, 7},
                 {1, 2, 3, 4, 5},
                 {1, 2, 4, 5, 6},
                 {1, 2, 3, 4, 5, 10}
         };
-        int[] k = {4, 4, 2, 3};
-        int[] x = {4, 3, 10, -5};
+        int[] k = {3,2,4, 4, 2, 3};
+        int[] x = {3,3,4, 3, 10, -5};
         for(int i=0; i<k.length; i++){
             List<Integer> kList = findClosestElements(inputs[i], k[i], x[i]);
             System.out.print(i+1);

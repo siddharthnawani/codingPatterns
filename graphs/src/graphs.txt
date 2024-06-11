@@ -1,0 +1,33 @@
+Graph traversal
+
+There are two fundamental graph traversal techniques: breadth-first search (BFS) and depth-first search (DFS). Let’s dive deep into these traversals.
+
+Depth-first search (DFS)
+
+In DFS, the strategy is to explore as far as possible along one path before turning back. The algorithm starts with a chosen source node and proceeds to one of its neighbor nodes while marking the source node as visited. From there, it goes to one of its neighbors and marks this newly traversed node as visited. This continues until it reaches a node with no neighbors. Now, the algorithm starts backtracking. In backtracking, the algorithm goes one step back and checks for the remaining neighbor nodes that are yet to be explored. This process continues until all the nodes in the graph, that are reachable from the source node, have been visited.
+
+We can implement this algorithm using a stack. Initialize an empty stack and choose a source node, push it onto the stack, and mark it as visited. While the stack is not empty, pop a node, explore its unvisited neighbors, and push them onto the stack, marking them as visited. Continue this process until reaching a node with no unvisited neighbors, then backtrack by popping from the stack. Repeat until the stack is empty, ensuring all connected nodes are visited.
+
+Breadth-first search (BFS)
+
+In BFS, the strategy is to explore the graph in layers, one level at a time. The algorithm begins at a chosen source node and visits all its immediate neighbor nodes while marking them as visited. It then moves on to visit the neighbors of those nodes before proceeding to the next level of neighbors. This process continues until all the nodes in the graph, that are reachable from the source node, have been visited.
+
+We can implement this algorithm using a queue. Initialize an empty queue and choose a source node, enqueue it, and then enter a loop. Within this loop, the algorithm dequeues a node from the front of the queue, visits its immediate neighbors, and marks them as visited. These neighbors are subsequently enqueued into the queue. The queue plays a crucial role in determining the order of exploration, ensuring that nodes at the current level are processed before progressing to the next. This iterative process continues until the queue is empty, signifying that all reachable nodes from the source have been visited.
+
+Graph algorithms
+
+Traversals can be used to find paths, cycles, or connected components within graphs. However, when aiming for specific objectives, such as determining the shortest path rather than any path, or identifying the minimum spanning tree instead of connected components, traversals can be adapted to address particular optimization problems associated with the graph.
+
+There are various algorithms that help us solve these specific graph problems. Let’s go over a few:
+
+Dijkstra’s algorithm: It’s a variation of DFS and finds the shortest path between two nodes in a weighted graph.
+
+Bellman-Ford algorithm: It’s a variation of BFS and finds the shortest paths in a weighted graph, even when negative edge weights are present.
+
+Floyd-Warshall algorithm: It’s a variation of BFS and finds the shortest paths between all pairs of nodes in a weighted graph.
+
+Topological sorting: It’s similar to DFS and orders nodes in a directed acyclic graph (DAG) to satisfy dependencies.
+
+Prim’s algorithm: It finds the minimum spanning tree of a connected, undirected graph.
+
+Kruskal’s algorithm: It also finds the minimum spanning tree of a connected, undirected graph.
